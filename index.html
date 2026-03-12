@@ -1111,7 +1111,7 @@ footer {
 <!-- ════ JAVASCRIPT ════ -->
 <script>
 const BACKEND_URL = 'https://oya-backend.onrender.com/ask';
-const FREE_LIMIT  = 5;
+const FREE_LIMIT  = 10;
 
 /* ─── EXAMPLE PROMPTS ─── */
 const EXAMPLES = {
@@ -1141,11 +1141,12 @@ const EXAMPLES = {
 /* ─── STATE ─── */
 let currentMode = 'learn';
 let usedCount = parseInt(localStorage.getItem('oya_used') || '0');
-const today = new Date().toDateString();
-if (localStorage.getItem('oya_day') !== today) {
+const lastReset = parseInt(localStorage.getItem('oya_reset') || '0');
+const SIX_HOURS = 6 * 60 * 60 * 1000;
+if (Date.now() - lastReset > SIX_HOURS) {
   usedCount = 0;
   localStorage.setItem('oya_used', '0');
-  localStorage.setItem('oya_day', today);
+  localStorage.setItem('oya_reset', Date.now().toString());
 }
 // conversationHistory stores ONLY completed turns for memory
 // Format: [{role:'user',content:''},{role:'assistant',content:''}]
