@@ -1405,6 +1405,323 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
+/* ─── INIT ─── */
+updateFreeCount();
+renderChips('learn');
+initParticles();
+
+/* ─── MODE ─── */
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.mode-tab.${mode}`).classList.add('active');
+
+  const placeholders = {
+    learn:  'Ask OYA anything... e.g. Explain photosynthesis step by step for WAEC',
+    hustle: 'Ask OYA... e.g. Write a sales script to sell data bundles on WhatsApp',
+    create: 'Ask OYA... e.g. Give me 5 viral TikTok ideas for Nigerian creators'
+  };
+  const labels  = { learn: 'OYA Learn', hustle: 'OYA Hustle', create: 'OYA Create' };
+  const colors  = { learn: 'var(--learn)', hustle: 'var(--hustle)', create: 'var(--create)' };
+
+  document.getElementById('userInput').placeholder = placeholders[mode];
+  document.getElementById('indicatorText').textContent = labels[mode];
+  document.getElementById('indicatorDot').style.background = colors[mode];
+  document.getElementById('indicatorText').style.color = colors[mode];
+
+  renderChips(mode);
+}
+
+/* ─── CHIPS ─── */
+function renderChips(mode) {
+  const container = document.getElementById('chipContainer');
+  container.innerHTML = EXAMPLES[mode].map(ex =>
+    `<button class="chip" onclick="fillChip(this)">${ex}</button>`
+  ).join('');
+}
+
+function fillChip(el) {
+  document.getElementById('userInput').value = el.textContent;
+  onType();
+  document.getElementById('userInput').focus();
+}
+
+/* ─── TYPING ─── */
+function onType() {
+  const len = document.getElementById('userInput').value.length;
+  document.getElementById('charNum').textContent = len;
+}
+
+/* ─── FREE COUNT ─── */
+function updateFreeCount() {
+  const rem = Math.max(0, FREE_LIMIT - usedCount);
+  document.getElementById('freeCountBadge').textContent = `${rem} left today`;
+  if (rem === 0) {
+    document.getElementById('askBtn').disabled = true;
+    document.getElementById('limitBox').classList.add('show');
+  }
+}
+
+/* ─── CORE ASK FUNCTION ─── */
+async function sendMessage(userMessage) {
+  if (usedCount >= FREE_LIMIT) {
+    document.getElementById('limitBox').classList.add('show');
+    return;
+  }
+
+  // Add user bubble to chat history display
+  addBubbleToHistory('user', userMessage);
+
+  // Add to memory
+  conversationHistory.push({ role: 'user', content: userMessage });
+
+  // Show loading
+  document.getElementById('loadingBox').classList.add('show');
+  document.getElementById('askBtn').disabled = true;
+  document.getElementById('outputBox').classList.remove('show');
+  document.getElementById('recommendBox').style.display = 'none';
+  document.getElementById('followUpBox').style.display = 'none';
+
+  try {
+    const res = await fetch(BACKEND_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: userMessage,
+        mode: currentMode,
+        history: conversationHistory.slice(-10) // send last 10 turns
+      })
+    });
+
+    if (!res.ok) throw new Error(`${res.status}`);
+    const data = await res.json();
+    const answer = data.reply || data.answer || data.text || 'No answer received';
+    lastAnswer = answer;
+
+    // Add to memory
+    conversationHistory.push({ role: 'assistant', content: answer });
+
+    document.getElementById('loadingBox').classList.remove('show');
+
+    // Show answer with typewriter in output box
+    await typewriterOutput(answer);
+
+    // Show follow-up + recommendations
+    showFollowUp();
+    await generateRecommendations(userMessage, answer);
+
+    usedCount++;
+    localStorage.setItem('oya_used', usedCount.toString());
+    updateFreeCount();
+
+  } catch (err) {
+    document.getElementById('loadingBox').classList.remove('show');
+    showOutputDirect(`OYA is warming up ⚡\n\nOur servers are currently being set up. Check back very soon — OYA will be fully live shortly.\n\nThank you for your patience. 🇳🇬`);
+  }
+
+  if (usedCount < FREE_LIMIT) document.getElementById('askBtn').disabled = false;
+}
+
+/* ─── ASK OYA (main button) ─── */
+async function askOYA() {
+  const input = document.getElementById('userInput').value.trim();
+  if (!input) { showToast('⚡ Type something first!'); return; }
+  document.getElementById('userInput').value = '';
+  onType();
+  await sendMessage(input);
+}
+
+/* ─── FOLLOW-UP ─── */
+async function askFollowUp() {
+  const input = document.getElementById('followUpInput').value.trim();
+  if (!input) { showToast('⚡ Type your follow-up!'); return; }
+  document.getElementById('followUpInput').value = '';
+
+  // Archive current answer to history bubbles
+  archiveCurrentAnswer();
+  await sendMessage(input);
+}
+
+function showFollowUp() {
+  document.getElementById('followUpBox').style.display = 'flex';
+}
+
+/* ─── ARCHIVE current answer into chat history bubbles ─── */
+function archiveCurrentAnswer() {
+  // Already added via addBubbleToHistory during typewriter, nothing extra needed
+}
+
+/* ─── CHAT HISTORY BUBBLES ─── */
+function addBubbleToHistory(role, text) {
+  const history = document.getElementById('chatHistory');
+  if (conversationHistory.length > 2) {
+    // Only show past exchanges, not current
+    const div = document.createElement('div');
+    div.className = `chat-bubble ${role}`;
+    div.textContent = text;
+    history.appendChild(div);
+    history.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }
+}
+
+/* ─── RECOMMENDATIONS ─── */
+async function generateRecommendations(question, answer) {
+  const recommendBox = document.getElementById('recommendBox');
+  const recommendBtns = document.getElementById('recommendBtns');
+
+  // Generate smart recommendations based on mode
+  const recs = getSmartRecommendations(question, currentMode);
+
+  recommendBtns.innerHTML = recs.map((r, i) =>
+    `<button class="recommend-btn" onclick="useRecommendation(this)">
+      <span>${i + 1}.</span>${r}
+    </button>`
+  ).join('');
+
+  recommendBox.style.display = 'block';
+}
+
+function getSmartRecommendations(question, mode) {
+  const learnRecs = [
+    `Explain this with a real-life example`,
+    `Give me past WAEC/JAMB questions on this topic`,
+    `Summarize this in 3 simple bullet points`,
+    `What are common mistakes students make on this topic?`,
+    `Create a short quiz to test my understanding`
+  ];
+  const hustleRecs = [
+    `Give me a WhatsApp message I can send right now`,
+    `How do I scale this idea with little capital?`,
+    `What are the biggest risks and how to avoid them?`,
+    `Write me a social media post about this`,
+    `Give me a step-by-step action plan for tomorrow`
+  ];
+  const createRecs = [
+    `Write a hook for this as a TikTok video`,
+    `Give me 5 content ideas based on this topic`,
+    `Write a caption for Instagram about this`,
+    `How do I make this go viral in Nigeria?`,
+    `Turn this into a YouTube script outline`
+  ];
+
+  const pool = mode === 'hustle' ? hustleRecs : mode === 'create' ? createRecs : learnRecs;
+  // Pick 3 random recommendations
+  const shuffled = pool.sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 3);
+}
+
+async function useRecommendation(btn) {
+  const text = btn.innerText.replace(/^\d+\.\s*/, '').trim();
+  archiveCurrentAnswer();
+  // Add user bubble for recommendation
+  conversationHistory.push({ role: 'user', content: text });
+  addBubbleToHistory('user', text);
+  document.getElementById('recommendBox').style.display = 'none';
+  document.getElementById('followUpBox').style.display = 'none';
+
+  document.getElementById('loadingBox').classList.add('show');
+  document.getElementById('outputBox').classList.remove('show');
+  document.getElementById('askBtn').disabled = true;
+
+  try {
+    const res = await fetch(BACKEND_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: text,
+        mode: currentMode,
+        history: conversationHistory.slice(-10)
+      })
+    });
+    if (!res.ok) throw new Error(`${res.status}`);
+    const data = await res.json();
+    const answer = data.reply || data.answer || 'No answer received';
+    lastAnswer = answer;
+    conversationHistory.push({ role: 'assistant', content: answer });
+
+    document.getElementById('loadingBox').classList.remove('show');
+    await typewriterOutput(answer);
+    showFollowUp();
+    await generateRecommendations(text, answer);
+
+    usedCount++;
+    localStorage.setItem('oya_used', usedCount.toString());
+    updateFreeCount();
+  } catch (err) {
+    document.getElementById('loadingBox').classList.remove('show');
+    showOutputDirect('OYA is warming up ⚡\n\nCheck back soon.');
+  }
+
+  if (usedCount < FREE_LIMIT) document.getElementById('askBtn').disabled = false;
+}
+
+/* ─── TYPEWRITER OUTPUT ─── */
+async function typewriterOutput(text) {
+  const box = document.getElementById('outputBox');
+  const content = document.getElementById('outputContent');
+  box.classList.add('show');
+  content.innerHTML = '';
+
+  let i = 0;
+  const cursor = document.createElement('span');
+  cursor.className = 'cursor-blink';
+  content.appendChild(cursor);
+  const speed = text.length > 400 ? 5 : 10;
+
+  return new Promise(resolve => {
+    function tick() {
+      if (i < text.length) {
+        cursor.before(document.createTextNode(text[i]));
+        i++;
+        setTimeout(tick, speed);
+      } else {
+        cursor.remove();
+        resolve();
+      }
+    }
+    tick();
+  });
+}
+
+function showOutputDirect(text) {
+  document.getElementById('outputBox').classList.add('show');
+  document.getElementById('outputContent').textContent = text;
+}
+
+/* ─── CLEAR ALL ─── */
+function clearChat() {
+  conversationHistory = [];
+  lastAnswer = '';
+  document.getElementById('chatHistory').innerHTML = '';
+  document.getElementById('outputBox').classList.remove('show');
+  document.getElementById('outputContent').textContent = '';
+  document.getElementById('recommendBox').style.display = 'none';
+  document.getElementById('followUpBox').style.display = 'none';
+  document.getElementById('userInput').value = '';
+  onType();
+}
+
+/* ─── COPY ─── */
+function copyOutput() {
+  const text = document.getElementById('outputContent').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '✅ Copied!';
+    btn.classList.add('copied');
+    showToast('✅ Copied to clipboard!');
+    setTimeout(() => { btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+/* ─── TOAST ─── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+/* ─────────────────────────────────────
    STORM PARTICLE SYSTEM
    Floating gold particles — OYA's storm
 ───────────────────────────────────── */
