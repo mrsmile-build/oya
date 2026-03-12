@@ -5,31 +5,40 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content="OYA — Africa's AI. Built for students, hustlers and creators. Born in Nigeria, ready for the world."/>
 <title>OYA — Africa's AI</title>
-<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-L1WEXNJMWQ"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
+  window.dataLayer=window.dataLayer||[];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-L1WEXNJMWQ');
+  gtag('js',new Date());
+  gtag('config','G-L1WEXNJMWQ');
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-:root {
+:root{
   --black:#05080f;--black2:#090d18;--black3:#0d1220;--card:#0f1525;--card2:#141b2e;
   --gold:#f0a500;--gold2:#ffc840;--gold-dim:rgba(240,165,0,0.12);--gold-glow:rgba(240,165,0,0.22);
   --green:#00a86b;--green2:#00d688;--green-dim:rgba(0,168,107,0.12);
-  --storm:#7c5cfc;--storm-dim:rgba(124,92,252,0.12);
-  --white:#f0ece4;--muted:#5a6680;--muted2:#8494b0;
+  --storm:#7c5cfc;--white:#f0ece4;--muted:#5a6680;--muted2:#8494b0;
   --border:rgba(240,165,0,0.12);--border2:rgba(255,255,255,0.06);
   --learn:#00c6fb;--hustle:#f0a500;--create:#e040fb;--radius:18px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;font-size:16px;}
+html{scroll-behavior:smooth;}
 body{background:var(--black);color:var(--white);font-family:'Sora',sans-serif;min-height:100vh;overflow-x:hidden;}
 .bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(240,165,0,0.07) 0%,transparent 60%),radial-gradient(ellipse 40% 60% at 90% 100%,rgba(0,168,107,0.06) 0%,transparent 60%);}
 .bg-pattern{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.025;background-image:repeating-linear-gradient(45deg,rgba(240,165,0,1) 0px,rgba(240,165,0,1) 1px,transparent 1px,transparent 40px),repeating-linear-gradient(-45deg,rgba(240,165,0,1) 0px,rgba(240,165,0,1) 1px,transparent 1px,transparent 40px);}
 #stormCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.35;}
+
+/* SUITE NAV */
+.suite-nav{position:relative;z-index:200;background:rgba(5,8,15,0.98);border-bottom:1px solid var(--border2);padding:0.45rem 1.2rem;display:flex;align-items:center;gap:0.5rem;overflow-x:auto;scrollbar-width:none;}
+.suite-nav::-webkit-scrollbar{display:none;}
+.suite-label{font-size:0.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-right:0.4rem;white-space:nowrap;flex-shrink:0;}
+.suite-pill{display:flex;align-items:center;gap:0.35rem;padding:0.28rem 0.75rem;border-radius:99px;border:1px solid var(--border2);background:transparent;color:var(--muted2);font-size:0.65rem;font-weight:600;text-decoration:none;white-space:nowrap;transition:all 0.2s;font-family:'Syne',sans-serif;flex-shrink:0;}
+.suite-pill:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+.suite-pill.current{border-color:rgba(0,168,107,0.4);color:var(--green2);background:var(--green-dim);}
+.suite-pill .sdot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+
+/* HEADER */
 header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(5,8,15,0.82);backdrop-filter:blur(20px);border-bottom:1px solid var(--border2);}
 .logo{display:flex;align-items:center;gap:0.75rem;text-decoration:none;}
 .logo-mark{width:42px;height:42px;flex-shrink:0;}
@@ -37,9 +46,11 @@ header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify
 .logo-wordmark{font-family:'Syne',sans-serif;font-size:1.65rem;font-weight:800;letter-spacing:6px;background:linear-gradient(110deg,var(--gold) 0%,var(--gold2) 50%,var(--white) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
 .logo-sub{font-size:0.58rem;font-weight:500;letter-spacing:3px;color:var(--muted2);text-transform:uppercase;margin-top:2px;}
 .header-right{display:flex;align-items:center;gap:0.9rem;}
-.hdr-badge{display:flex;align-items:center;gap:0.4rem;padding:0.35rem 0.9rem;border-radius:99px;border:1px solid var(--border);background:var(--gold-dim);color:var(--gold);font-size:0.72rem;font-weight:600;letter-spacing:0.5px;}
-.hdr-badge .pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite;}
+.hdr-badge{display:flex;align-items:center;gap:0.4rem;padding:0.35rem 0.9rem;border-radius:99px;border:1px solid var(--border);background:var(--gold-dim);color:var(--gold);font-size:0.72rem;font-weight:600;}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite;}
 #freeCountBadge{font-size:0.72rem;color:var(--muted2);font-weight:500;}
+
+/* HERO */
 .hero{position:relative;z-index:5;text-align:center;padding:5rem 1.5rem 3rem;overflow:hidden;}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:0.6rem;padding:0.4rem 1.1rem;border-radius:99px;border:1px solid rgba(0,168,107,0.3);background:var(--green-dim);color:var(--green2);font-size:0.72rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:2rem;animation:riseUp 0.8s 0.1s both;}
 .hero-eyebrow span{font-size:1rem;}
@@ -49,9 +60,11 @@ header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify
 .hero-tagline{font-size:clamp(0.9rem,2.5vw,1.15rem);color:var(--muted2);max-width:500px;margin:1.8rem auto 0;line-height:1.8;font-weight:300;animation:riseUp 0.8s 0.25s both;}
 .hero-tagline strong{color:var(--gold);font-weight:600;}
 .storm-ring{position:absolute;border-radius:50%;border:1px solid rgba(240,165,0,0.08);top:50%;left:50%;transform:translate(-50%,-50%);animation:ringPulse 4s ease-in-out infinite;pointer-events:none;}
-.storm-ring:nth-child(1){width:400px;height:400px;animation-delay:0s;}
+.storm-ring:nth-child(1){width:400px;height:400px;}
 .storm-ring:nth-child(2){width:650px;height:650px;animation-delay:1s;border-color:rgba(240,165,0,0.05);}
 .storm-ring:nth-child(3){width:900px;height:900px;animation-delay:2s;border-color:rgba(240,165,0,0.03);}
+
+/* MODE TABS */
 .mode-wrap{position:relative;z-index:5;display:flex;justify-content:center;gap:0.7rem;padding:0 1rem 2.5rem;flex-wrap:wrap;animation:riseUp 0.8s 0.3s both;}
 .mode-tab{display:flex;align-items:center;gap:0.7rem;padding:0.9rem 1.8rem;border-radius:14px;border:1.5px solid var(--border2);background:var(--card);cursor:pointer;transition:all 0.3s ease;position:relative;overflow:hidden;font-family:'Syne',sans-serif;}
 .mode-tab::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s ease;}
@@ -70,11 +83,24 @@ header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify
 .mode-tab.active.learn .tab-name{color:var(--learn);}
 .mode-tab.active.hustle .tab-name{color:var(--hustle);}
 .mode-tab.active.create .tab-name{color:var(--create);}
+
+/* WORKSPACE */
 .workspace{position:relative;z-index:5;max-width:780px;margin:0 auto;padding:0 1.2rem 1.5rem;animation:riseUp 0.8s 0.4s both;}
 .chips-label{font-size:0.68rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:0.6rem;}
-.chips{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.chips{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;}
 .chip{padding:0.38rem 0.9rem;border-radius:99px;border:1px solid var(--border2);background:rgba(255,255,255,0.02);color:var(--muted2);font-size:0.72rem;font-weight:500;cursor:pointer;transition:all 0.2s ease;font-family:'Sora',sans-serif;white-space:nowrap;}
 .chip:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+
+/* USAGE BAR */
+.usage-wrap{margin-bottom:1rem;}
+.usage-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.usage-label{font-size:0.65rem;color:var(--muted);font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+.usage-countdown{font-size:0.65rem;color:var(--muted2);}
+.usage-countdown b{color:var(--gold);}
+.usage-track{height:3px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden;}
+.usage-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--green),var(--gold));transition:width 0.5s ease;}
+
+/* INPUT */
 .input-box{background:var(--card);border:1.5px solid var(--border2);border-radius:var(--radius);padding:1.4rem 1.4rem 1rem;transition:border-color 0.3s,box-shadow 0.3s;margin-bottom:0.8rem;}
 .input-box:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow),0 20px 60px rgba(0,0,0,0.3);}
 .input-top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.9rem;}
@@ -90,14 +116,26 @@ header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify
 .ask-btn{display:flex;align-items:center;gap:0.6rem;padding:0.85rem 2rem;border-radius:12px;border:none;background:linear-gradient(135deg,#c78000,var(--gold) 50%,var(--gold2));color:#060a00;font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all 0.25s ease;flex-shrink:0;white-space:nowrap;}
 .ask-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(240,165,0,0.4);}
 .ask-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* CHAT LOG */
 .chat-log{background:var(--card);border:1.5px solid rgba(0,168,107,0.2);border-radius:var(--radius);margin-bottom:0.8rem;overflow:hidden;display:none;}
 .chat-log-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border2);font-family:'Syne',sans-serif;font-size:0.75rem;color:var(--green2);letter-spacing:0.08em;}
 #chatMessages{display:flex;flex-direction:column;gap:12px;padding:16px;max-height:60vh;overflow-y:auto;}
 .chat-bubble{border-radius:14px;padding:12px 16px;font-size:0.9rem;line-height:1.75;animation:riseUp 0.3s ease;word-break:break-word;}
 .chat-bubble.user{background:var(--gold-dim);border:1px solid var(--border);color:var(--gold2);align-self:flex-end;max-width:88%;}
 .chat-bubble.user::before{content:'👤 You';font-size:0.7rem;opacity:0.6;display:block;margin-bottom:4px;font-family:'Syne',sans-serif;}
-.chat-bubble.oya{background:var(--card2);border:1px solid var(--border2);color:var(--white);align-self:flex-start;max-width:100%;white-space:pre-wrap;}
+.chat-bubble.oya{background:var(--card2);border:1px solid var(--border2);color:var(--white);align-self:flex-start;max-width:100%;white-space:pre-wrap;position:relative;}
 .chat-bubble.oya::before{content:'⚡ OYA';font-size:0.7rem;color:var(--gold);display:block;margin-bottom:6px;font-family:'Syne',sans-serif;}
+
+/* BUBBLE ACTION BUTTONS */
+.bubble-actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border2);flex-wrap:wrap;}
+.bub-btn{display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--muted2);font-size:0.68rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Sora',sans-serif;}
+.bub-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+.bub-btn.copied,.bub-btn.liked{border-color:var(--green);color:var(--green2);background:var(--green-dim);}
+.bub-btn.disliked{border-color:rgba(255,80,80,0.4);color:#ff8080;background:rgba(255,80,80,0.08);}
+.bub-btn.wa{border-color:rgba(37,211,102,0.3);color:#25d366;}
+.bub-btn.wa:hover{background:rgba(37,211,102,0.1);}
+
 .recommend-box{margin:0 16px 4px;border-top:1px solid var(--border2);padding-top:14px;display:none;}
 .recommend-label{font-size:0.78rem;color:var(--gold);letter-spacing:0.08em;margin-bottom:10px;font-family:'Syne',sans-serif;}
 .recommend-btns{display:flex;flex-direction:column;gap:8px;padding-bottom:8px;}
@@ -117,12 +155,26 @@ header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify
 .limit-box h3{font-family:'Syne',sans-serif;color:var(--gold);font-size:1rem;font-weight:700;margin-bottom:0.4rem;}
 .limit-box p{color:var(--muted2);font-size:0.82rem;line-height:1.6;}
 
-/* ── PRO PLAN SECTION ── */
+/* WELCOME POPUP */
+.welcome-overlay{position:fixed;inset:0;z-index:999;background:rgba(5,8,15,0.92);display:flex;align-items:center;justify-content:center;padding:1rem;animation:fadeIn 0.3s ease;}
+.welcome-box{background:var(--card);border:1.5px solid var(--border);border-radius:24px;padding:2rem;max-width:400px;width:100%;text-align:center;animation:riseUp 0.4s ease;}
+.welcome-icon{font-size:3.5rem;margin-bottom:1rem;}
+.welcome-title{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;background:linear-gradient(110deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.5rem;}
+.welcome-sub{font-size:0.88rem;color:var(--muted2);line-height:1.7;margin-bottom:1.5rem;}
+.welcome-sub strong{color:var(--gold);}
+.welcome-btn{width:100%;padding:1rem;border:none;border-radius:14px;background:linear-gradient(135deg,#c78000,var(--gold));color:#000;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;letter-spacing:1px;cursor:pointer;transition:all 0.25s;}
+.welcome-btn:hover{box-shadow:0 8px 24px rgba(240,165,0,0.4);}
+.welcome-features{display:flex;justify-content:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.wf{font-size:0.72rem;color:var(--muted2);display:flex;align-items:center;gap:0.3rem;}
+.wf span{color:var(--green2);}
+
+/* PRO PRICING */
 .pricing{position:relative;z-index:5;max-width:780px;margin:0 auto 2rem;padding:0 1.2rem;}
 .pricing-label{text-align:center;font-size:0.68rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;}
 .pricing-title{text-align:center;font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--white);margin-bottom:0.4rem;}
 .pricing-sub{text-align:center;font-size:0.82rem;color:var(--muted2);margin-bottom:1.8rem;}
 .pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:500px){.pricing-grid{grid-template-columns:1fr;}}
 .plan-card{background:var(--card);border:1.5px solid var(--border2);border-radius:var(--radius);padding:1.5rem;position:relative;transition:transform 0.25s;}
 .plan-card:hover{transform:translateY(-4px);}
 .plan-card.pro{border-color:var(--gold);background:linear-gradient(145deg,#0f1525,#1a1400);}
@@ -138,18 +190,16 @@ header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify
 .plan-period{font-size:0.72rem;color:var(--muted);margin-bottom:1.2rem;}
 .plan-features{list-style:none;display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.4rem;}
 .plan-features li{font-size:0.8rem;color:var(--muted2);display:flex;align-items:flex-start;gap:0.5rem;line-height:1.5;}
-.plan-features li .fi{font-size:0.9rem;flex-shrink:0;margin-top:1px;}
+.plan-features li .fi{font-size:0.9rem;flex-shrink:0;}
 .plan-features li.pro-only{color:var(--white);}
 .plan-btn{width:100%;padding:0.8rem;border-radius:12px;font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.25s;border:none;}
 .plan-card.free .plan-btn{background:var(--green-dim);color:var(--green2);border:1.5px solid rgba(0,168,107,0.3);}
-.plan-card.free .plan-btn:hover{background:var(--green);color:#000;}
 .plan-card.pro .plan-btn{background:linear-gradient(135deg,#c78000,var(--gold));color:#000;font-weight:800;}
-.plan-card.pro .plan-btn:hover{box-shadow:0 8px 24px rgba(240,165,0,0.4);transform:translateY(-1px);}
+.plan-card.pro .plan-btn:hover{box-shadow:0 8px 24px rgba(240,165,0,0.4);}
 .pro-glow{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--gold),var(--gold2));color:#000;font-size:0.6rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:0.2rem 1rem;border-radius:0 0 8px 8px;}
-@media(max-width:500px){.pricing-grid{grid-template-columns:1fr;}}
 
 .features{position:relative;z-index:5;max-width:780px;margin:2rem auto;padding:0 1.2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0.8rem;}
-.feat-card{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:1.2rem;transition:transform 0.25s ease,border-color 0.25s ease;}
+.feat-card{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:1.2rem;transition:transform 0.25s,border-color 0.25s;}
 .feat-card:hover{transform:translateY(-4px);border-color:rgba(240,165,0,0.25);}
 .feat-icon{font-size:1.6rem;margin-bottom:0.6rem;}
 .feat-title{font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:0.5px;margin-bottom:0.3rem;}
@@ -157,7 +207,7 @@ header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify
 .ecosystem{position:relative;z-index:5;max-width:780px;margin:0 auto 3rem;padding:0 1.2rem;}
 .eco-label{text-align:center;font-size:0.68rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;}
 .eco-grid{display:flex;justify-content:center;gap:0.6rem;flex-wrap:wrap;}
-.eco-pill{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1.1rem;border-radius:99px;border:1px solid var(--border2);background:var(--card);font-size:0.75rem;font-weight:600;color:var(--muted2);font-family:'Syne',sans-serif;letter-spacing:0.5px;transition:all 0.2s ease;}
+.eco-pill{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1.1rem;border-radius:99px;border:1px solid var(--border2);background:var(--card);font-size:0.75rem;font-weight:600;color:var(--muted2);font-family:'Syne',sans-serif;letter-spacing:0.5px;transition:all 0.2s;}
 .eco-pill.live{border-color:rgba(0,168,107,0.3);color:var(--green2);background:var(--green-dim);}
 footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2rem;text-align:center;}
 .footer-logo{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:5px;background:linear-gradient(110deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.4rem;}
@@ -165,21 +215,63 @@ footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2
 .footer-links{display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;}
 .footer-links a{color:var(--muted);text-decoration:none;font-size:0.72rem;font-weight:500;transition:color 0.2s;}
 .footer-links a:hover{color:var(--gold);}
-.footer-bottom{margin-top:1.2rem;font-size:0.65rem;color:var(--muted);opacity:0.6;letter-spacing:0.5px;}
-.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(16px);background:var(--green);color:#002a16;font-weight:700;font-size:0.8rem;padding:0.65rem 1.4rem;border-radius:99px;opacity:0;transition:all 0.3s ease;z-index:999;pointer-events:none;white-space:nowrap;}
+.footer-bottom{margin-top:1.2rem;font-size:0.65rem;color:var(--muted);opacity:0.6;}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(16px);background:var(--green);color:#002a16;font-weight:700;font-size:0.8rem;padding:0.65rem 1.4rem;border-radius:99px;opacity:0;transition:all 0.3s;z-index:9999;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
 @keyframes riseUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.7);}}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 @keyframes ringPulse{0%,100%{opacity:0.4;transform:translate(-50%,-50%) scale(1);}50%{opacity:0.7;transform:translate(-50%,-50%) scale(1.03);}}
-@media(max-width:580px){header{padding:0.9rem 1rem;}.hero{padding:3rem 1rem 2rem;}.mode-tab{padding:0.8rem 1.2rem;}.tab-desc{display:none;}.input-actions{flex-direction:column;align-items:stretch;}.ask-btn{justify-content:center;width:100%;}.action-hints{display:none;}}
+@media(max-width:580px){
+  header{padding:0.9rem 1rem;}
+  .hero{padding:3rem 1rem 2rem;}
+  .mode-tab{padding:0.8rem 1.2rem;}
+  .tab-desc{display:none;}
+  .input-actions{flex-direction:column;align-items:stretch;}
+  .ask-btn{justify-content:center;width:100%;}
+  .action-hints{display:none;}
+}
 </style>
 </head>
 <body>
 <div class="bg-layer"></div>
 <div class="bg-pattern"></div>
 <canvas id="stormCanvas"></canvas>
+
+<!-- WELCOME POPUP -->
+<div class="welcome-overlay" id="welcomeOverlay" style="display:none;">
+  <div class="welcome-box">
+    <div class="welcome-icon">🌩️</div>
+    <div class="welcome-title">Welcome to OYA</div>
+    <div class="welcome-sub">Africa's AI — <strong>Born in Nigeria, Built for the World.</strong><br>Ask anything in your own style. Free. No dollar. No wahala.</div>
+    <div class="welcome-features">
+      <div class="wf"><span>🎓</span> WAEC &amp; JAMB</div>
+      <div class="wf"><span>💰</span> Business &amp; Hustle</div>
+      <div class="wf"><span>🎬</span> Content &amp; TikTok</div>
+      <div class="wf"><span>⚡</span> 10 Free Daily</div>
+    </div>
+    <button class="welcome-btn" onclick="closeWelcome()">⚡ Start Using OYA Free</button>
+  </div>
+</div>
+
+<!-- SUITE NAV -->
+<div class="suite-nav">
+  <span class="suite-label">OYA Suite</span>
+  <a class="suite-pill current" href="#">
+    <span class="sdot"></span>OYA AI
+  </a>
+  <a class="suite-pill" href="https://mrsmile-build.github.io/chat2cash/" target="_blank">
+    💬 Chat2Cash
+  </a>
+  <a class="suite-pill" href="https://mrsmile-build.github.io/quicksite-builder/" target="_blank">
+    🌐 QuickSite
+  </a>
+  <a class="suite-pill" href="#">
+    📱 OYA App <small style="opacity:0.5;font-size:0.55rem;">soon</small>
+  </a>
+</div>
 
 <header>
   <a class="logo" href="#">
@@ -234,6 +326,14 @@ footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2
   <div class="chips-label">Try an example →</div>
   <div class="chips" id="chipContainer"></div>
 
+  <div class="usage-wrap">
+    <div class="usage-top">
+      <span class="usage-label" id="usageLabel">0 / 10 used</span>
+      <span class="usage-countdown" id="countdownLabel"></span>
+    </div>
+    <div class="usage-track"><div class="usage-fill" id="usageFill" style="width:0%"></div></div>
+  </div>
+
   <div class="input-box">
     <div class="input-top-bar">
       <div class="input-mode-indicator">
@@ -264,7 +364,7 @@ footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2
       <div class="recommend-btns" id="recommendBtns"></div>
     </div>
     <div class="followup-box" id="followUpBox">
-      <textarea class="followup-input" id="followUpInput" placeholder="Ask a follow-up question..."></textarea>
+      <textarea class="followup-input" id="followUpInput" placeholder="Ask a follow-up... e.g. Give me a funny version of this"></textarea>
       <button class="followup-btn" onclick="askFollowUp()">⚡ Ask</button>
     </div>
   </div>
@@ -275,13 +375,12 @@ footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2
   </div>
 </main>
 
-<!-- PRO PLAN TEASER -->
+<!-- PRO PRICING -->
 <section class="pricing">
   <div class="pricing-label">OYA Plans</div>
   <div class="pricing-title">Free Forever. Or Go Pro. 🔥</div>
   <div class="pricing-sub">Start free, upgrade when you're ready to unlock full power.</div>
   <div class="pricing-grid">
-    <!-- FREE PLAN -->
     <div class="plan-card free">
       <div class="plan-badge">Free</div>
       <div class="plan-name">OYA Free</div>
@@ -289,9 +388,9 @@ footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2
       <div class="plan-period">Forever free · No card needed</div>
       <ul class="plan-features">
         <li><span class="fi">✅</span> 10 AI answers every 6 hours</li>
-        <li><span class="fi">✅</span> OYA Learn, Hustle & Create</li>
+        <li><span class="fi">✅</span> OYA Learn, Hustle &amp; Create</li>
         <li><span class="fi">✅</span> Full conversation history</li>
-        <li><span class="fi">✅</span> Smart follow-up suggestions</li>
+        <li><span class="fi">✅</span> Copy &amp; WhatsApp share</li>
         <li><span class="fi">❌</span> <span style="opacity:0.4">Unlimited daily answers</span></li>
         <li><span class="fi">❌</span> <span style="opacity:0.4">Priority fast responses</span></li>
         <li><span class="fi">❌</span> <span style="opacity:0.4">Download answers as PDF</span></li>
@@ -299,7 +398,6 @@ footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2
       </ul>
       <button class="plan-btn" onclick="showToast('You are on the Free plan ✅')">Current Plan</button>
     </div>
-    <!-- PRO PLAN -->
     <div class="plan-card pro">
       <div class="pro-glow">⚡ COMING SOON</div>
       <div class="plan-badge">Pro</div>
@@ -333,10 +431,9 @@ footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2
 <div class="ecosystem">
   <div class="eco-label">The OYA Ecosystem</div>
   <div class="eco-grid">
-    <div class="eco-pill live">⚡ OYA Learn</div>
-    <div class="eco-pill live">💰 OYA Hustle</div>
-    <div class="eco-pill live">🎬 OYA Create</div>
-    <div class="eco-pill">🌐 OYA Sites</div>
+    <div class="eco-pill live">⚡ OYA AI</div>
+    <div class="eco-pill live">💬 Chat2Cash</div>
+    <div class="eco-pill live">🌐 QuickSite</div>
     <div class="eco-pill">💳 OYA Cash</div>
     <div class="eco-pill">🔌 OYA API</div>
     <div class="eco-pill">📱 OYA App</div>
@@ -347,261 +444,330 @@ footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2
   <div class="footer-logo">OYA</div>
   <div class="footer-tag">Born in Nigeria · Built for Africa · Ready for the World</div>
   <div class="footer-links"><a href="#">About</a><a href="#">Products</a><a href="#">API</a><a href="#">Contact</a><a href="#">Privacy</a></div>
-  <div class="footer-bottom">© 2025 Naija Digital Group · OYA v2.0 · All rights reserved</div>
+  <div class="footer-bottom">© 2025 Naija Digital Group · OYA v3.0 · All rights reserved</div>
 </footer>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const BACKEND_URL = 'https://oya-backend.onrender.com/ask';
-const FREE_LIMIT = 10;
-const SIX_HOURS = 6 * 60 * 60 * 1000;
+const BACKEND_URL='https://oya-backend.onrender.com/ask';
+const FREE_LIMIT=10;
+const SIX_HOURS=6*60*60*1000;
 
-const EXAMPLES = {
-  learn: ['Explain osmosis step by step for WAEC','Solve: 3x² - 12 = 0','What caused the Nigerian Civil War?','Photosynthesis simple explanation','How does the kidney work? JAMB level'],
-  hustle: ['Write a WhatsApp sales broadcast for data bundles','5 profitable business ideas in Nigeria ₦50k capital','Sales script to close a clothing customer on Instagram','How to start mini importation from China to Nigeria','Write a professional freelance proposal for web design'],
-  create: ['5 TikTok ideas about Lagos street food','Write a YouTube hook for a Nigerian money vlog','Instagram caption for Ankara fashion post','Content calendar for a Nigerian lifestyle creator','Viral Twitter thread idea about Naija hustle culture']
+const EXAMPLES={
+  learn:['Explain osmosis step by step for WAEC','Solve: 3x² - 12 = 0','What caused the Nigerian Civil War?','Photosynthesis simple explanation','How does the kidney work? JAMB level'],
+  hustle:['Write a WhatsApp sales broadcast for data bundles','5 profitable business ideas in Nigeria ₦50k capital','Sales script to close a clothing customer on Instagram','How to start mini importation from China to Nigeria','Write a professional freelance proposal for web design'],
+  create:['5 TikTok ideas about Lagos street food','Write a YouTube hook for a Nigerian money vlog','Instagram caption for Ankara fashion post','Content calendar for a Nigerian lifestyle creator','Viral Twitter thread idea about Naija hustle culture']
 };
 
-let currentMode = 'learn';
-let conversationHistory = [];
-let usedCount = parseInt(localStorage.getItem('oya_used') || '0');
-const lastReset = parseInt(localStorage.getItem('oya_reset') || '0');
-if (Date.now() - lastReset > SIX_HOURS) {
-  usedCount = 0;
-  localStorage.setItem('oya_used', '0');
-  localStorage.setItem('oya_reset', Date.now().toString());
+let currentMode='learn';
+let conversationHistory=[];
+let usedCount=parseInt(localStorage.getItem('oya_used')||'0');
+const lastReset=parseInt(localStorage.getItem('oya_reset')||'0');
+if(Date.now()-lastReset>SIX_HOURS){
+  usedCount=0;
+  localStorage.setItem('oya_used','0');
+  localStorage.setItem('oya_reset',Date.now().toString());
 }
 
 updateFreeCount();
 renderChips('learn');
 initParticles();
 keepAlive();
+startCountdown();
 
-// ── KEEP-ALIVE: ping backend every 10 minutes so Render never sleeps ──
-function keepAlive() {
-  fetch('https://oya-backend.onrender.com').catch(() => {});
-  setInterval(() => {
-    fetch('https://oya-backend.onrender.com').catch(() => {});
-  }, 10 * 60 * 1000);
+// Show welcome popup for first-time visitors
+if(!localStorage.getItem('oya_welcomed')){
+  document.getElementById('welcomeOverlay').style.display='flex';
 }
 
-function setMode(mode) {
-  currentMode = mode;
-  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
-  document.querySelector('.mode-tab.' + mode).classList.add('active');
-  const placeholders = {learn:'Ask OYA anything... e.g. Explain photosynthesis step by step for WAEC',hustle:'Ask OYA... e.g. Write a sales script to sell data bundles on WhatsApp',create:'Ask OYA... e.g. Give me 5 viral TikTok ideas for Nigerian creators'};
-  const labels = {learn:'OYA Learn',hustle:'OYA Hustle',create:'OYA Create'};
-  const colors = {learn:'var(--learn)',hustle:'var(--hustle)',create:'var(--create)'};
-  document.getElementById('userInput').placeholder = placeholders[mode];
-  document.getElementById('indicatorText').textContent = labels[mode];
-  document.getElementById('indicatorDot').style.background = colors[mode];
-  document.getElementById('indicatorText').style.color = colors[mode];
+function closeWelcome(){
+  document.getElementById('welcomeOverlay').style.display='none';
+  localStorage.setItem('oya_welcomed','1');
+}
+
+function keepAlive(){
+  fetch('https://oya-backend.onrender.com').catch(()=>{});
+  setInterval(()=>{fetch('https://oya-backend.onrender.com').catch(()=>{});},10*60*1000);
+}
+
+function startCountdown(){
+  function tick(){
+    const reset=parseInt(localStorage.getItem('oya_reset')||Date.now().toString());
+    const diff=SIX_HOURS-(Date.now()-reset);
+    if(diff<=0){
+      document.getElementById('countdownLabel').innerHTML='';
+      return;
+    }
+    const h=Math.floor(diff/3600000);
+    const m=Math.floor((diff%3600000)/60000);
+    const s=Math.floor((diff%60000)/1000);
+    const pad=n=>String(n).padStart(2,'0');
+    document.getElementById('countdownLabel').innerHTML=
+      usedCount>=FREE_LIMIT
+        ? 'Resets in <b>'+pad(h)+':'+pad(m)+':'+pad(s)+'</b>'
+        : 'Resets in <b>'+pad(h)+':'+pad(m)+':'+pad(s)+'</b>';
+  }
+  tick();
+  setInterval(tick,1000);
+}
+
+function setMode(mode){
+  currentMode=mode;
+  document.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector('.mode-tab.'+mode).classList.add('active');
+  const ph={learn:'Ask OYA anything... e.g. Explain photosynthesis for WAEC',hustle:'Ask OYA... e.g. Write a WhatsApp sales script for my business',create:'Ask OYA... e.g. Give me 5 viral TikTok ideas for Nigerian creators'};
+  const lb={learn:'OYA Learn',hustle:'OYA Hustle',create:'OYA Create'};
+  const cl={learn:'var(--learn)',hustle:'var(--hustle)',create:'var(--create)'};
+  document.getElementById('userInput').placeholder=ph[mode];
+  document.getElementById('indicatorText').textContent=lb[mode];
+  document.getElementById('indicatorDot').style.background=cl[mode];
+  document.getElementById('indicatorText').style.color=cl[mode];
   renderChips(mode);
-  gtag('event', 'mode_switch', {mode: mode});
+  gtag('event','mode_switch',{mode:mode});
 }
 
-function renderChips(mode) {
-  document.getElementById('chipContainer').innerHTML = EXAMPLES[mode].map(ex =>
-    '<button class="chip" onclick="fillChip(this)">' + ex + '</button>'
+function renderChips(mode){
+  document.getElementById('chipContainer').innerHTML=EXAMPLES[mode].map(ex=>
+    '<button class="chip" onclick="fillChip(this)">'+ex+'</button>'
   ).join('');
 }
 
-function fillChip(el) {
-  document.getElementById('userInput').value = el.textContent;
+function fillChip(el){
+  document.getElementById('userInput').value=el.textContent;
   onType();
 }
 
-function onType() {
-  document.getElementById('charNum').textContent = document.getElementById('userInput').value.length;
+function onType(){
+  document.getElementById('charNum').textContent=document.getElementById('userInput').value.length;
 }
 
-function updateFreeCount() {
-  const rem = Math.max(0, FREE_LIMIT - usedCount);
-  document.getElementById('freeCountBadge').textContent = rem + ' left';
-  if (rem === 0) {
-    document.getElementById('askBtn').disabled = true;
+function updateFreeCount(){
+  const rem=Math.max(0,FREE_LIMIT-usedCount);
+  document.getElementById('freeCountBadge').textContent=rem+' left';
+  const pct=(usedCount/FREE_LIMIT)*100;
+  document.getElementById('usageFill').style.width=pct+'%';
+  document.getElementById('usageLabel').textContent=usedCount+' / '+FREE_LIMIT+' used';
+  if(rem===0){
+    document.getElementById('askBtn').disabled=true;
     document.getElementById('limitBox').classList.add('show');
+    document.getElementById('usageFill').style.background='linear-gradient(90deg,var(--gold),#ff6b35)';
   }
 }
 
-async function askOYA() {
-  const input = document.getElementById('userInput').value.trim();
-  if (!input) { showToast('⚡ Type something first!'); return; }
-  document.getElementById('userInput').value = '';
+async function askOYA(){
+  const input=document.getElementById('userInput').value.trim();
+  if(!input){showToast('⚡ Type something first!');return;}
+  document.getElementById('userInput').value='';
   onType();
   await sendMessage(input);
 }
 
-async function askFollowUp() {
-  const input = document.getElementById('followUpInput').value.trim();
-  if (!input) { showToast('⚡ Type your follow-up!'); return; }
-  document.getElementById('followUpInput').value = '';
+async function askFollowUp(){
+  const input=document.getElementById('followUpInput').value.trim();
+  if(!input){showToast('⚡ Type your follow-up!');return;}
+  document.getElementById('followUpInput').value='';
   await sendMessage(input);
 }
 
-async function sendMessage(userMessage) {
-  if (usedCount >= FREE_LIMIT) { document.getElementById('limitBox').classList.add('show'); return; }
+async function sendMessage(userMessage){
+  if(usedCount>=FREE_LIMIT){document.getElementById('limitBox').classList.add('show');return;}
+  document.getElementById('chatLog').style.display='block';
+  document.getElementById('recommendBox').style.display='none';
+  document.getElementById('followUpBox').style.display='none';
+  document.getElementById('askBtn').disabled=true;
 
-  document.getElementById('chatLog').style.display = 'block';
-  document.getElementById('recommendBox').style.display = 'none';
-  document.getElementById('followUpBox').style.display = 'none';
-  document.getElementById('askBtn').disabled = true;
+  addBubble('user',userMessage);
+  const oyaBubble=addBubble('oya','');
+  oyaBubble.innerHTML='<span style="opacity:0.5">⚡ OYA is thinking...</span>';
 
-  addBubble('user', userMessage);
-  const oyaBubble = addBubble('oya', '');
-  oyaBubble.innerHTML = '<span style="opacity:0.5">⚡ OYA is thinking...</span>';
-
-  const wakeTimer = setTimeout(() => {
-    if (oyaBubble.innerHTML.includes('thinking')) {
-      oyaBubble.innerHTML = '<span style="opacity:0.6">⚡ Waking up OYA... takes up to 30 seconds on first use. Please wait 🇳🇬</span>';
+  const wakeTimer=setTimeout(()=>{
+    if(oyaBubble.innerHTML.includes('thinking')){
+      oyaBubble.innerHTML='<span style="opacity:0.6">⚡ Waking up OYA... first visit takes ~30 seconds. Please wait 🇳🇬</span>';
     }
-  }, 8000);
+  },8000);
 
-  const startTime = Date.now();
-
-  try {
-    const res = await fetch(BACKEND_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({message: userMessage, mode: currentMode, history: conversationHistory.slice(-12)})
+  const t0=Date.now();
+  try{
+    const res=await fetch(BACKEND_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:userMessage,mode:currentMode,history:conversationHistory.slice(-12)})
     });
     clearTimeout(wakeTimer);
-    if (!res.ok) throw new Error(res.status);
-    const data = await res.json();
-    const answer = data.reply || 'No answer received';
+    if(!res.ok)throw new Error(res.status);
+    const data=await res.json();
+    const answer=data.reply||'No answer received';
 
-    await typewriterIntoBubble(oyaBubble, answer);
+    await typewriterIntoBubble(oyaBubble,answer);
+    addBubbleActions(oyaBubble,answer);
 
-    conversationHistory.push({role: 'user', content: userMessage});
-    conversationHistory.push({role: 'assistant', content: answer});
+    conversationHistory.push({role:'user',content:userMessage});
+    conversationHistory.push({role:'assistant',content:answer});
 
-    document.getElementById('followUpBox').style.display = 'flex';
+    document.getElementById('followUpBox').style.display='flex';
     showRecommendations();
 
     usedCount++;
-    localStorage.setItem('oya_used', usedCount.toString());
+    localStorage.setItem('oya_used',usedCount.toString());
     updateFreeCount();
+    gtag('event','ask_oya',{mode:currentMode,response_ms:Date.now()-t0});
 
-    // Track successful ask in GA
-    gtag('event', 'ask_oya', {mode: currentMode, response_time_ms: Date.now() - startTime});
-
-  } catch (err) {
+  }catch(err){
     clearTimeout(wakeTimer);
-    oyaBubble.textContent = 'Could not reach OYA ⚡ — check your connection and try again.';
-    gtag('event', 'ask_error', {mode: currentMode});
+    oyaBubble.textContent='Could not reach OYA ⚡ — check your connection and try again.';
+    gtag('event','ask_error',{mode:currentMode});
   }
 
-  if (usedCount < FREE_LIMIT) document.getElementById('askBtn').disabled = false;
+  if(usedCount<FREE_LIMIT)document.getElementById('askBtn').disabled=false;
   scrollChat();
 }
 
-function addBubble(role, text) {
-  const div = document.createElement('div');
-  div.className = 'chat-bubble ' + role;
-  div.textContent = text;
+function addBubble(role,text){
+  const div=document.createElement('div');
+  div.className='chat-bubble '+role;
+  div.textContent=text;
   document.getElementById('chatMessages').appendChild(div);
   scrollChat();
   return div;
 }
 
-function scrollChat() {
-  const m = document.getElementById('chatMessages');
-  m.scrollTop = m.scrollHeight;
+function addBubbleActions(bubble,text){
+  const actions=document.createElement('div');
+  actions.className='bubble-actions';
+  actions.innerHTML=
+    '<button class="bub-btn" onclick="copyAnswer(this,`'+encodeURIComponent(text)+'`)">📋 Copy</button>'+
+    '<button class="bub-btn wa" onclick="shareWhatsApp(`'+encodeURIComponent(text)+'`)">📲 WhatsApp</button>'+
+    '<button class="bub-btn" onclick="rateAnswer(this,1)">👍 Helpful</button>'+
+    '<button class="bub-btn" onclick="rateAnswer(this,0)">👎 Not helpful</button>';
+  bubble.appendChild(actions);
 }
 
-async function typewriterIntoBubble(bubble, text) {
-  bubble.innerHTML = '';
-  let i = 0;
-  const cursor = document.createElement('span');
-  cursor.className = 'cursor-blink';
+function copyAnswer(btn,encoded){
+  const text=decodeURIComponent(encoded);
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='✅ Copied!';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='📋 Copy';btn.classList.remove('copied');},2000);
+  });
+  gtag('event','copy_answer',{mode:currentMode});
+}
+
+function shareWhatsApp(encoded){
+  const text=decodeURIComponent(encoded);
+  const msg=text+'\n\n⚡ Generated by OYA — Africa\'s AI\nhttps://mrsmile-build.github.io/oya/';
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+  gtag('event','share_whatsapp',{mode:currentMode});
+}
+
+function rateAnswer(btn,rating){
+  const actions=btn.parentElement;
+  actions.querySelectorAll('.bub-btn').forEach(b=>{
+    if(b.textContent.includes('👍')||b.textContent.includes('👎'))b.style.display='none';
+  });
+  btn.style.display='flex';
+  if(rating===1){btn.textContent='👍 Thanks!';btn.classList.add('liked');}
+  else{btn.textContent='👎 Noted';btn.classList.add('disliked');}
+  gtag('event','rate_answer',{mode:currentMode,rating:rating});
+}
+
+function scrollChat(){
+  const m=document.getElementById('chatMessages');
+  m.scrollTop=m.scrollHeight;
+}
+
+async function typewriterIntoBubble(bubble,text){
+  bubble.innerHTML='';
+  let i=0;
+  const cursor=document.createElement('span');
+  cursor.className='cursor-blink';
   bubble.appendChild(cursor);
-  const speed = text.length > 400 ? 5 : 10;
-  return new Promise(resolve => {
-    function tick() {
-      if (i < text.length) {
+  const speed=text.length>400?5:10;
+  return new Promise(resolve=>{
+    function tick(){
+      if(i<text.length){
         cursor.before(document.createTextNode(text[i]));
         i++;
-        if (i % 30 === 0) scrollChat();
-        setTimeout(tick, speed);
-      } else { cursor.remove(); resolve(); }
+        if(i%30===0)scrollChat();
+        setTimeout(tick,speed);
+      }else{cursor.remove();resolve();}
     }
     tick();
   });
 }
 
-function showRecommendations() {
-  const learnRecs = ['Explain this with a real-life example','Give me WAEC/JAMB past questions on this topic','Summarize in 3 simple bullet points','What common mistakes do students make here?','Create a short quiz to test my understanding'];
-  const hustleRecs = ['Give me a WhatsApp message I can send right now','How do I scale this with little capital?','What are the biggest risks and how to avoid them?','Write a social media post about this','Give me a step-by-step action plan for tomorrow'];
-  const createRecs = ['Write a TikTok hook for this topic','Give me 5 content ideas based on this','Write an Instagram caption about this','How do I make this go viral in Nigeria?','Turn this into a YouTube script outline'];
-  const pool = currentMode === 'hustle' ? hustleRecs : currentMode === 'create' ? createRecs : learnRecs;
-  const recs = pool.sort(() => Math.random() - 0.5).slice(0, 3);
-  document.getElementById('recommendBtns').innerHTML = recs.map((r, i) =>
-    '<button class="recommend-btn" onclick="useRec(this)"><span>' + (i+1) + '.</span>' + r + '</button>'
+function showRecommendations(){
+  const lr=['Explain this with a real-life example','Give me WAEC/JAMB past questions on this','Summarize in 3 simple bullet points','What mistakes do students make here?','Create a short quiz to test me'];
+  const hr=['Give me a WhatsApp message I can send now','How do I scale this with little capital?','What are the biggest risks and how to avoid them?','Write a social media post about this','Give me a step-by-step action plan for tomorrow'];
+  const cr=['Write a TikTok hook for this topic','Give me 5 content ideas based on this','Write an Instagram caption about this','How do I make this go viral in Nigeria?','Turn this into a YouTube script outline'];
+  const pool=currentMode==='hustle'?hr:currentMode==='create'?cr:lr;
+  const recs=pool.sort(()=>Math.random()-0.5).slice(0,3);
+  document.getElementById('recommendBtns').innerHTML=recs.map((r,i)=>
+    '<button class="recommend-btn" onclick="useRec(this)"><span>'+(i+1)+'.</span>'+r+'</button>'
   ).join('');
-  document.getElementById('recommendBox').style.display = 'block';
+  document.getElementById('recommendBox').style.display='block';
   scrollChat();
 }
 
-async function useRec(btn) {
-  const text = btn.innerText.replace(/^\d+\.\s*/, '').trim();
-  document.getElementById('recommendBox').style.display = 'none';
-  document.getElementById('followUpBox').style.display = 'none';
+async function useRec(btn){
+  const text=btn.innerText.replace(/^\d+\.\s*/,'').trim();
+  document.getElementById('recommendBox').style.display='none';
+  document.getElementById('followUpBox').style.display='none';
   await sendMessage(text);
 }
 
-function clearChat() {
-  conversationHistory = [];
-  document.getElementById('chatMessages').innerHTML = '';
-  document.getElementById('chatLog').style.display = 'none';
-  document.getElementById('recommendBox').style.display = 'none';
-  document.getElementById('followUpBox').style.display = 'none';
-  document.getElementById('userInput').value = '';
+function clearChat(){
+  conversationHistory=[];
+  document.getElementById('chatMessages').innerHTML='';
+  document.getElementById('chatLog').style.display='none';
+  document.getElementById('recommendBox').style.display='none';
+  document.getElementById('followUpBox').style.display='none';
+  document.getElementById('userInput').value='';
   onType();
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  setTimeout(()=>t.classList.remove('show'),2500);
 }
 
-function initParticles() {
-  const canvas = document.getElementById('stormCanvas');
-  const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
-  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+function initParticles(){
+  const canvas=document.getElementById('stormCanvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,particles=[];
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
   resize();
-  window.addEventListener('resize', resize);
-  class Particle {
-    constructor() { this.reset(); }
-    reset() {
-      this.x = Math.random() * W; this.y = H + 10;
-      this.vx = (Math.random() - 0.5) * 0.6; this.vy = -(Math.random() * 0.5 + 0.2);
-      this.size = Math.random() * 2 + 0.5; this.alpha = 0; this.life = 0;
-      this.maxLife = Math.random() * 300 + 200;
-      this.color = Math.random() > 0.6 ? 'rgba(240,165,0,' : Math.random() > 0.5 ? 'rgba(0,168,107,' : 'rgba(255,200,64,';
+  window.addEventListener('resize',resize);
+  class Particle{
+    constructor(){this.reset();}
+    reset(){
+      this.x=Math.random()*W;this.y=H+10;
+      this.vx=(Math.random()-0.5)*0.6;this.vy=-(Math.random()*0.5+0.2);
+      this.size=Math.random()*2+0.5;this.alpha=0;this.life=0;
+      this.maxLife=Math.random()*300+200;
+      this.color=Math.random()>0.6?'rgba(240,165,0,':Math.random()>0.5?'rgba(0,168,107,':'rgba(255,200,64,';
     }
-    update() {
-      this.x += this.vx; this.y += this.vy; this.life++;
-      const t = this.life / this.maxLife;
-      this.alpha = t < 0.1 ? t * 10 : t > 0.8 ? (1 - t) * 5 : 1;
-      if (this.life >= this.maxLife) this.reset();
+    update(){
+      this.x+=this.vx;this.y+=this.vy;this.life++;
+      const t=this.life/this.maxLife;
+      this.alpha=t<0.1?t*10:t>0.8?(1-t)*5:1;
+      if(this.life>=this.maxLife)this.reset();
     }
-    draw() {
-      ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = this.color + (this.alpha * 0.6) + ')'; ctx.fill();
+    draw(){
+      ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+      ctx.fillStyle=this.color+(this.alpha*0.6)+')';ctx.fill();
     }
   }
-  for (let i = 0; i < 60; i++) {
-    const p = new Particle();
-    p.life = Math.random() * p.maxLife; p.y = Math.random() * H;
+  for(let i=0;i<60;i++){
+    const p=new Particle();
+    p.life=Math.random()*p.maxLife;p.y=Math.random()*H;
     particles.push(p);
   }
-  function loop() {
-    ctx.clearRect(0, 0, W, H);
-    particles.forEach(p => { p.update(); p.draw(); });
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{p.update();p.draw();});
     requestAnimationFrame(loop);
   }
   loop();
