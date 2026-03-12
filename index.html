@@ -1244,11 +1244,16 @@ async function sendMessage(userMessage) {
   const oyaBubble = addBubble('oya', '');
 
   // Show typing indicator inside OYA bubble
-  oyaBubble.innerHTML = '<span style="opacity:0.5">OYA is thinking...</span>';
+  oyaBubble.innerHTML = '<span style="opacity:0.5">⚡ OYA is thinking...</span>';
   scrollChatToBottom();
-
-  document.getElementById('loadingBox').classList.remove('show');
   document.getElementById('askBtn').disabled = true;
+
+  // If taking long, show wake-up message (Render free tier spin-up)
+  const wakeTimer = setTimeout(() => {
+    if (oyaBubble.innerHTML.includes('thinking')) {
+      oyaBubble.innerHTML = '<span style="opacity:0.5">⚡ OYA is waking up... this takes up to 30 seconds on first use. Please wait 🇳🇬</span>';
+    }
+  }, 8000);
 
   try {
     const res = await fetch(BACKEND_URL, {
@@ -1257,10 +1262,11 @@ async function sendMessage(userMessage) {
       body: JSON.stringify({
         message: userMessage,
         mode: currentMode,
-        history: conversationHistory.slice(-12) // send completed history
+        history: conversationHistory.slice(-12)
       })
     });
 
+    clearTimeout(wakeTimer);
     if (!res.ok) throw new Error(`${res.status}`);
     const data = await res.json();
     const answer = data.reply || data.answer || data.text || 'No answer received';
