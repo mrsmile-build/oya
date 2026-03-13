@@ -116,6 +116,15 @@ header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify
 .ask-btn{display:flex;align-items:center;gap:0.6rem;padding:0.85rem 2rem;border-radius:12px;border:none;background:linear-gradient(135deg,#c78000,var(--gold) 50%,var(--gold2));color:#060a00;font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all 0.25s ease;flex-shrink:0;white-space:nowrap;}
 .ask-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(240,165,0,0.4);}
 .ask-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.upload-btn{display:flex;align-items:center;gap:0.4rem;padding:0.85rem 1rem;border-radius:12px;border:1.5px solid var(--border2);background:transparent;color:var(--muted2);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.25s;font-family:'Syne',sans-serif;flex-shrink:0;}
+.upload-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+.upload-btn.has-file{border-color:var(--green);color:var(--green2);background:var(--green-dim);}
+#fileInput{display:none;}
+.file-preview{display:none;align-items:center;gap:0.6rem;padding:0.5rem 0.8rem;background:var(--green-dim);border:1px solid rgba(0,168,107,0.3);border-radius:10px;margin-bottom:0.6rem;font-size:0.75rem;color:var(--green2);font-weight:600;}
+.file-preview.show{display:flex;}
+.file-preview .fp-remove{background:none;border:none;color:var(--green2);cursor:pointer;font-size:1rem;margin-left:auto;padding:0;}
+.vision-badge{display:none;font-size:0.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:99px;background:rgba(124,92,252,0.15);border:1px solid rgba(124,92,252,0.3);color:#b39dfc;margin-left:auto;}
+.vision-badge.show{display:inline-block;}
 
 /* CHAT LOG */
 .chat-log{background:var(--card);border:1.5px solid rgba(0,168,107,0.2);border-radius:var(--radius);margin-bottom:0.8rem;overflow:hidden;display:none;}
@@ -340,14 +349,23 @@ footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2
         <span class="indicator-dot" id="indicatorDot"></span>
         <span class="indicator-text" id="indicatorText">OYA Learn</span>
       </div>
+      <span class="vision-badge" id="visionBadge">🔮 Vision Mode</span>
       <span class="char-counter"><span id="charNum">0</span>/1500</span>
     </div>
+    <div class="file-preview" id="filePreview">
+      <span id="fileIcon">🖼️</span>
+      <span id="fileName">image.jpg</span>
+      <button class="fp-remove" onclick="removeFile()">✕</button>
+    </div>
+    <input type="file" id="fileInput" accept="image/*,.pdf,.txt" onchange="onFileSelect(this)"/>
     <textarea id="userInput" placeholder="Ask OYA anything... e.g. Explain osmosis step by step for WAEC" maxlength="1500" rows="5" oninput="onType()"></textarea>
     <div class="input-actions">
-      <div class="action-hints">
-        <span class="hint-tag">📚 Step-by-step</span>
-        <span class="hint-tag">🇳🇬 Nigerian context</span>
-        <span class="hint-tag">⚡ Instant</span>
+      <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+        <button class="upload-btn" id="uploadBtn" onclick="document.getElementById('fileInput').click()">📎 Image / File</button>
+        <div class="action-hints">
+          <span class="hint-tag">🇳🇬 Nigerian context</span>
+          <span class="hint-tag">⚡ Instant</span>
+        </div>
       </div>
       <button class="ask-btn" id="askBtn" onclick="askOYA()">⚡ &nbsp;Ask OYA</button>
     </div>
@@ -462,6 +480,9 @@ const EXAMPLES={
 
 let currentMode='learn';
 let conversationHistory=[];
+let currentFile=null;
+let currentFileData=null;
+let currentFileType=null;
 let usedCount=parseInt(localStorage.getItem('oya_used')||'0');
 const lastReset=parseInt(localStorage.getItem('oya_reset')||'0');
 if(Date.now()-lastReset>SIX_HOURS){
@@ -555,29 +576,71 @@ function updateFreeCount(){
   }
 }
 
+function onFileSelect(input){
+  const file=input.files[0];
+  if(!file) return;
+  currentFile=file;
+  const isImage=file.type.startsWith('image/');
+  const isPDF=file.type==='application/pdf';
+  const isText=file.type.startsWith('text/');
+  document.getElementById('fileIcon').textContent=isImage?'🖼️':isPDF?'📄':'📝';
+  document.getElementById('fileName').textContent=file.name.length>30?file.name.slice(0,30)+'...':file.name;
+  document.getElementById('filePreview').classList.add('show');
+  document.getElementById('uploadBtn').classList.add('has-file');
+  document.getElementById('visionBadge').classList.add('show');
+  const reader=new FileReader();
+  if(isImage){
+    reader.onload=e=>{
+      currentFileData=e.target.result.split(',')[1];
+      currentFileType='image';
+    };
+    reader.readAsDataURL(file);
+  } else if(isPDF||isText){
+    reader.onload=e=>{
+      currentFileData=e.target.result;
+      currentFileType='text';
+    };
+    reader.readAsText(file);
+  }
+  showToast('📎 File attached — ask OYA about it!');
+}
+
+function removeFile(){
+  currentFile=null;currentFileData=null;currentFileType=null;
+  document.getElementById('fileInput').value='';
+  document.getElementById('filePreview').classList.remove('show');
+  document.getElementById('uploadBtn').classList.remove('has-file');
+  document.getElementById('visionBadge').classList.remove('show');
+}
+
 async function askOYA(){
   const input=document.getElementById('userInput').value.trim();
-  if(!input){showToast('⚡ Type something first!');return;}
+  if(!input && !currentFile){showToast('⚡ Type something or attach a file!');return;}
   document.getElementById('userInput').value='';
   onType();
-  await sendMessage(input);
+  const fileData=currentFileData;
+  const fileType=currentFileType;
+  const fileName=currentFile?currentFile.name:null;
+  removeFile();
+  await sendMessage(input||'What is in this file?',fileData,fileType,fileName);
 }
 
 async function askFollowUp(){
   const input=document.getElementById('followUpInput').value.trim();
   if(!input){showToast('⚡ Type your follow-up!');return;}
   document.getElementById('followUpInput').value='';
-  await sendMessage(input);
+  await sendMessage(input,null,null,null);
 }
 
-async function sendMessage(userMessage){
+async function sendMessage(userMessage,fileData,fileType,fileName){
   if(usedCount>=FREE_LIMIT){document.getElementById('limitBox').classList.add('show');return;}
   document.getElementById('chatLog').style.display='block';
   document.getElementById('recommendBox').style.display='none';
   document.getElementById('followUpBox').style.display='none';
   document.getElementById('askBtn').disabled=true;
 
-  addBubble('user',userMessage);
+  const displayMsg=fileName?`📎 ${fileName}\n${userMessage}`:userMessage;
+  addBubble('user',displayMsg);
   const oyaBubble=addBubble('oya','');
   oyaBubble.innerHTML='<span style="opacity:0.5">⚡ OYA is thinking...</span>';
 
@@ -598,7 +661,13 @@ async function sendMessage(userMessage){
     const res=await fetch(BACKEND_URL,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({message:userMessage,mode:currentMode,history:conversationHistory.slice(-12)})
+      body:JSON.stringify({
+        message:userMessage,
+        mode:currentMode,
+        history:conversationHistory.slice(-12),
+        fileData:fileData||null,
+        fileType:fileType||null
+      })
     });
     clearTimeout(wakeTimer);clearTimeout(netTimer);
     if(!res.ok)throw new Error(res.status);
