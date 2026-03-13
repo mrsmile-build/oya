@@ -583,9 +583,15 @@ async function sendMessage(userMessage){
 
   const wakeTimer=setTimeout(()=>{
     if(oyaBubble.innerHTML.includes('thinking')){
-      oyaBubble.innerHTML='<span style="opacity:0.6">⚡ Waking up OYA... first visit takes ~30 seconds. Please wait 🇳🇬</span>';
+      oyaBubble.innerHTML='<span style="opacity:0.6">⚡ Still thinking... this one needs more time ⏳</span>';
     }
   },8000);
+  const netTimer=setTimeout(()=>{
+    if(oyaBubble.innerHTML.includes('thinking')||oyaBubble.innerHTML.includes('Still thinking')){
+      oyaBubble.innerHTML='<span style="opacity:0.6">⚡ Taking too long — please check your internet connection and try again 🌐</span>';
+      document.getElementById('askBtn').disabled=false;
+    }
+  },25000);
 
   const t0=Date.now();
   try{
@@ -594,7 +600,7 @@ async function sendMessage(userMessage){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({message:userMessage,mode:currentMode,history:conversationHistory.slice(-12)})
     });
-    clearTimeout(wakeTimer);
+    clearTimeout(wakeTimer);clearTimeout(netTimer);
     if(!res.ok)throw new Error(res.status);
     const data=await res.json();
     const answer=data.reply||'No answer received';
@@ -614,7 +620,7 @@ async function sendMessage(userMessage){
     gtag('event','ask_oya',{mode:currentMode,response_ms:Date.now()-t0});
 
   }catch(err){
-    clearTimeout(wakeTimer);
+    clearTimeout(wakeTimer);clearTimeout(netTimer);
     oyaBubble.textContent='Could not reach OYA ⚡ — check your connection and try again.';
     gtag('event','ask_error',{mode:currentMode});
   }
