@@ -243,6 +243,32 @@ footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2
 .pwa-banner-text span{color:var(--gold);display:block;font-family:'Syne',sans-serif;font-size:0.85rem;}
 .pwa-install-btn{background:linear-gradient(135deg,#c78000,var(--gold));color:#000;border:none;border-radius:10px;padding:0.6rem 1rem;font-weight:800;font-size:0.78rem;font-family:'Syne',sans-serif;cursor:pointer;white-space:nowrap;}
 .pwa-dismiss{background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;padding:0.2rem;}
+/* PWA INSTALL SECTION */
+.pwa-section{position:relative;z-index:5;max-width:780px;margin:0 auto 2rem;padding:0 1.2rem;}
+.pwa-card{background:linear-gradient(135deg,rgba(0,168,107,0.08),rgba(240,165,0,0.06));border:1.5px solid rgba(0,168,107,0.25);border-radius:var(--radius);padding:1.5rem;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;}
+.pwa-card-icon{font-size:2.5rem;flex-shrink:0;}
+.pwa-card-text{flex:1;min-width:180px;}
+.pwa-card-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--white);margin-bottom:0.3rem;}
+.pwa-card-sub{font-size:0.78rem;color:var(--muted2);line-height:1.5;}
+.pwa-card-sub strong{color:var(--green2);}
+.pwa-card-btn{background:linear-gradient(135deg,#006b44,var(--green));color:#fff;border:none;border-radius:12px;padding:0.8rem 1.4rem;font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:800;letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:all 0.25s;flex-shrink:0;}
+.pwa-card-btn:hover{box-shadow:0 8px 24px rgba(0,168,107,0.4);transform:translateY(-2px);}
+/* PWA MODAL */
+.pwa-modal{position:fixed;inset:0;z-index:1000;background:rgba(5,8,15,0.92);display:none;align-items:flex-end;justify-content:center;padding:1rem;}
+.pwa-modal.show{display:flex;}
+.pwa-modal-box{background:var(--card);border:1.5px solid var(--border);border-radius:24px 24px 16px 16px;padding:1.8rem;width:100%;max-width:480px;}
+.pwa-modal-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--gold);margin-bottom:0.3rem;}
+.pwa-modal-sub{font-size:0.78rem;color:var(--muted2);margin-bottom:1.2rem;line-height:1.5;}
+.pwa-steps{display:flex;flex-direction:column;gap:0.7rem;margin-bottom:1.2rem;}
+.pwa-step{display:flex;align-items:flex-start;gap:0.8rem;background:var(--black3);border-radius:12px;padding:0.8rem;}
+.pwa-step-num{width:24px;height:24px;border-radius:50%;background:var(--gold);color:#000;font-size:0.7rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne',sans-serif;}
+.pwa-step-text{font-size:0.8rem;color:var(--white);line-height:1.5;}
+.pwa-step-text b{color:var(--gold);}
+.pwa-browsers{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.pwa-browser-btn{padding:0.4rem 0.9rem;border-radius:99px;border:1px solid var(--border2);background:transparent;color:var(--muted2);font-size:0.72rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Syne',sans-serif;}
+.pwa-browser-btn.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+.pwa-modal-close{width:100%;padding:0.8rem;border:1.5px solid var(--border2);border-radius:12px;background:transparent;color:var(--muted2);font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:700;cursor:pointer;}
+.pwa-modal-close:hover{border-color:var(--gold);color:var(--gold);}
 
 @keyframes riseUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
@@ -317,6 +343,7 @@ footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2
     </div>
   </a>
   <div class="header-right">
+    <button id="pwaHeaderBtn" onclick="installPWA()" style="display:none;align-items:center;gap:0.4rem;padding:0.35rem 0.9rem;border-radius:99px;border:1px solid rgba(0,168,107,0.4);background:rgba(0,168,107,0.1);color:var(--green2);font-size:0.68rem;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;letter-spacing:1px;">📲 Install App</button>
     <div class="hdr-badge"><span class="pulse-dot"></span>Free</div>
     <span id="freeCountBadge">10 left</span>
   </div>
@@ -471,6 +498,35 @@ footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2
     <div class="eco-pill">💳 OYA Cash</div>
     <div class="eco-pill">🔌 OYA API</div>
     <div class="eco-pill">📱 OYA App</div>
+  </div>
+</div>
+
+<!-- PWA INSTALL SECTION -->
+<section class="pwa-section">
+  <div class="pwa-card">
+    <div class="pwa-card-icon">📲</div>
+    <div class="pwa-card-text">
+      <div class="pwa-card-title">Install OYA as an App</div>
+      <div class="pwa-card-sub">Add OYA to your home screen — works like a real app. <strong>Free. No app store needed.</strong></div>
+    </div>
+    <button class="pwa-card-btn" onclick="showPWAModal()">⚡ Install Now</button>
+  </div>
+</section>
+
+<!-- PWA MODAL -->
+<div class="pwa-modal" id="pwaModal" onclick="hidePWAModal(event)">
+  <div class="pwa-modal-box">
+    <div class="pwa-modal-title">📲 Install OYA App</div>
+    <div class="pwa-modal-sub">Choose your browser for step-by-step instructions:</div>
+    <div class="pwa-browsers">
+      <button class="pwa-browser-btn active" onclick="showBrowserSteps('chrome',this)">Chrome</button>
+      <button class="pwa-browser-btn" onclick="showBrowserSteps('safari',this)">Safari</button>
+      <button class="pwa-browser-btn" onclick="showBrowserSteps('firefox',this)">Firefox</button>
+      <button class="pwa-browser-btn" onclick="showBrowserSteps('samsung',this)">Samsung</button>
+      <button class="pwa-browser-btn" onclick="showBrowserSteps('opera',this)">Opera</button>
+    </div>
+    <div class="pwa-steps" id="pwaSteps"></div>
+    <button class="pwa-modal-close" onclick="hidePWAModal()">Close</button>
   </div>
 </div>
 
@@ -947,11 +1003,67 @@ function initParticles(){
   }
   loop();
 }
+// ---- PWA MODAL ----
+const PWA_STEPS={
+  chrome:[
+    'Tap the <b>three dots menu (⋮)</b> at the top right of Chrome',
+    'Scroll down and tap <b>"Add to Home screen"</b> or <b>"Install app"</b>',
+    'Tap <b>"Add"</b> or <b>"Install"</b> on the popup',
+    'OYA icon will appear on your home screen — open it like any app! ⚡'
+  ],
+  safari:[
+    'Tap the <b>Share button (□↑)</b> at the bottom of Safari',
+    'Scroll down in the share menu and tap <b>"Add to Home Screen"</b>',
+    'Tap <b>"Add"</b> in the top right corner',
+    'OYA icon will appear on your home screen — open it like any app! ⚡'
+  ],
+  firefox:[
+    'Tap the <b>three dots menu (⋮)</b> at the bottom of Firefox',
+    'Tap <b>"Install"</b> or <b>"Add to Home screen"</b>',
+    'Tap <b>"Add"</b> to confirm',
+    'OYA icon will appear on your home screen — open it like any app! ⚡'
+  ],
+  samsung:[
+    'Tap the <b>three lines menu (≡)</b> at the bottom of Samsung Browser',
+    'Tap <b>"Add page to"</b> then select <b>"Home screen"</b>',
+    'Tap <b>"Add"</b> to confirm',
+    'OYA icon will appear on your home screen — open it like any app! ⚡'
+  ],
+  opera:[
+    'Tap the <b>Opera menu (O)</b> at the bottom',
+    'Tap <b>"Home screen"</b> or <b>"Add to Home screen"</b>',
+    'Tap <b>"Allow"</b> and then <b>"Add"</b>',
+    'OYA icon will appear on your home screen — open it like any app! ⚡'
+  ]
+};
+function showPWAModal(){
+  // Try native install first
+  if(deferredPrompt){installPWA();return;}
+  document.getElementById('pwaModal').classList.add('show');
+  showBrowserSteps('chrome',document.querySelector('.pwa-browser-btn'));
+}
+function hidePWAModal(e){
+  if(!e||e.target===document.getElementById('pwaModal')){
+    document.getElementById('pwaModal').classList.remove('show');
+  }
+}
+function showBrowserSteps(browser,btn){
+  document.querySelectorAll('.pwa-browser-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const steps=PWA_STEPS[browser]||PWA_STEPS.chrome;
+  document.getElementById('pwaSteps').innerHTML=steps.map((s,i)=>
+    `<div class="pwa-step">
+      <div class="pwa-step-num">${i+1}</div>
+      <div class="pwa-step-text">${s}</div>
+    </div>`
+  ).join('');
+}
 // ---- PWA INSTALL ----
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
   e.preventDefault();
   deferredPrompt=e;
+  document.getElementById('pwaHeaderBtn').style.display='flex';
   if(!localStorage.getItem('oya_pwa_dismissed')){
     setTimeout(()=>document.getElementById('pwaBanner').classList.add('show'),5000);
   }
