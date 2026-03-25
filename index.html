@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content="OYA — Africa's AI. Built for students, hustlers and creators. Born in Nigeria, ready for the world."/>
 <title>OYA — Africa's AI</title>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#f0a500"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="OYA AI"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-L1WEXNJMWQ"></script>
 <script>
   window.dataLayer=window.dataLayer||[];
@@ -227,6 +233,16 @@ footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2
 .footer-bottom{margin-top:1.2rem;font-size:0.65rem;color:var(--muted);opacity:0.6;}
 .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(16px);background:var(--green);color:#002a16;font-weight:700;font-size:0.8rem;padding:0.65rem 1.4rem;border-radius:99px;opacity:0;transition:all 0.3s;z-index:9999;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.thinking-dots span{animation:dotPulse 1.2s ease-in-out infinite;}
+.thinking-dots span:nth-child(2){animation-delay:0.2s;}
+.thinking-dots span:nth-child(3){animation-delay:0.4s;}
+@keyframes dotPulse{0%,100%{opacity:0.2;}50%{opacity:1;}}
+.pwa-banner{display:none;position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:9998;background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:1rem 1.2rem;box-shadow:0 20px 60px rgba(0,0,0,0.5);width:calc(100% - 2rem);max-width:400px;align-items:center;gap:0.8rem;}
+.pwa-banner.show{display:flex;}
+.pwa-banner-text{flex:1;font-size:0.8rem;color:var(--white);font-weight:600;line-height:1.4;}
+.pwa-banner-text span{color:var(--gold);display:block;font-family:'Syne',sans-serif;font-size:0.85rem;}
+.pwa-install-btn{background:linear-gradient(135deg,#c78000,var(--gold));color:#000;border:none;border-radius:10px;padding:0.6rem 1rem;font-weight:800;font-size:0.78rem;font-family:'Syne',sans-serif;cursor:pointer;white-space:nowrap;}
+.pwa-dismiss{background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;padding:0.2rem;}
 
 @keyframes riseUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
@@ -465,10 +481,19 @@ footer{position:relative;z-index:5;border-top:1px solid var(--border2);padding:2
   <div class="footer-bottom">© 2025 Naija Digital Group · OYA v3.0 · All rights reserved</div>
 </footer>
 
+<div class="pwa-banner" id="pwaBanner">
+  <div class="pwa-banner-text">
+    <span>⚡ Install OYA App</span>
+    Add to your home screen — use it like a real app. Free.
+  </div>
+  <button class="pwa-install-btn" onclick="installPWA()">Install</button>
+  <button class="pwa-dismiss" onclick="dismissPWA()">✕</button>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
-const BACKEND_URL='https://oya-backend.onrender.com/ask';
+const BACKEND_URL='https://oya-backend.onrender.com/ask-stream';
+const RECS_URL='https://oya-backend.onrender.com/recommendations';
 const FREE_LIMIT=10;
 const SIX_HOURS=6*60*60*1000;
 
@@ -642,21 +667,20 @@ async function sendMessage(userMessage,fileData,fileType,fileName){
   const displayMsg=fileName?`📎 ${fileName}\n${userMessage}`:userMessage;
   addBubble('user',displayMsg);
   const oyaBubble=addBubble('oya','');
-  oyaBubble.innerHTML='<span style="opacity:0.5">⚡ OYA is thinking...</span>';
-
-  const wakeTimer=setTimeout(()=>{
-    if(oyaBubble.innerHTML.includes('thinking')){
-      oyaBubble.innerHTML='<span style="opacity:0.6">⚡ Still thinking... this one needs more time ⏳</span>';
-    }
-  },8000);
-  const netTimer=setTimeout(()=>{
-    if(oyaBubble.innerHTML.includes('thinking')||oyaBubble.innerHTML.includes('Still thinking')){
-      oyaBubble.innerHTML='<span style="opacity:0.6">⚡ Taking too long — please check your internet connection and try again 🌐</span>';
-      document.getElementById('askBtn').disabled=false;
-    }
-  },25000);
+  oyaBubble.innerHTML='<span class="thinking-dots">⚡ OYA is thinking<span>.</span><span>.</span><span>.</span></span>';
 
   const t0=Date.now();
+  let fullAnswer='';
+  let streamStarted=false;
+
+  // Timeout only if stream never starts
+  const startTimer=setTimeout(()=>{
+    if(!streamStarted){
+      oyaBubble.innerHTML='<span style="opacity:0.6">⚡ Taking too long — check your internet and try again 🌐</span>';
+      document.getElementById('askBtn').disabled=false;
+    }
+  },20000);
+
   try{
     const res=await fetch(BACKEND_URL,{
       method:'POST',
@@ -669,32 +693,108 @@ async function sendMessage(userMessage,fileData,fileType,fileName){
         fileType:fileType||null
       })
     });
-    clearTimeout(wakeTimer);clearTimeout(netTimer);
-    if(!res.ok)throw new Error(res.status);
-    const data=await res.json();
-    const answer=data.reply||'No answer received';
 
-    await typewriterIntoBubble(oyaBubble,answer);
-    addBubbleActions(oyaBubble,answer);
+    clearTimeout(startTimer);
 
-    conversationHistory.push({role:'user',content:userMessage});
-    conversationHistory.push({role:'assistant',content:answer});
+    // Vision/file returns JSON, not stream
+    const contentType=res.headers.get('content-type')||'';
+    if(contentType.includes('application/json')){
+      const data=await res.json();
+      fullAnswer=data.reply||'No answer received';
+      oyaBubble.innerHTML='';
+      oyaBubble.textContent=fullAnswer;
+      finishAnswer(oyaBubble,fullAnswer,userMessage,t0);
+      return;
+    }
 
-    document.getElementById('followUpBox').style.display='flex';
-    showRecommendations();
+    // Streaming response
+    const reader=res.body.getReader();
+    const decoder=new TextDecoder();
+    let buffer='';
+    oyaBubble.innerHTML='';
 
-    usedCount++;
-    localStorage.setItem('oya_used',usedCount.toString());
-    updateFreeCount();
-    gtag('event','ask_oya',{mode:currentMode,response_ms:Date.now()-t0});
+    while(true){
+      const {done,value}=await reader.read();
+      if(done) break;
+      buffer+=decoder.decode(value,{stream:true});
+      const lines=buffer.split('\n');
+      buffer=lines.pop();
+
+      for(const line of lines){
+        const trimmed=line.trim();
+        if(!trimmed||!trimmed.startsWith('data:')) continue;
+        const data=trimmed.slice(5).trim();
+        if(data==='[DONE]'){
+          finishAnswer(oyaBubble,fullAnswer,userMessage,t0);
+          return;
+        }
+        if(data==='[ERROR]'){
+          oyaBubble.textContent='OYA had trouble answering — please try again.';
+          document.getElementById('askBtn').disabled=false;
+          return;
+        }
+        try{
+          const parsed=JSON.parse(data);
+          const token=parsed.token;
+          if(token){
+            if(!streamStarted){
+              streamStarted=true;
+              oyaBubble.innerHTML='';
+            }
+            fullAnswer+=token;
+            oyaBubble.textContent=fullAnswer;
+            scrollChat();
+          }
+        }catch(e){}
+      }
+    }
+    finishAnswer(oyaBubble,fullAnswer,userMessage,t0);
 
   }catch(err){
-    clearTimeout(wakeTimer);clearTimeout(netTimer);
+    clearTimeout(startTimer);
     oyaBubble.textContent='Could not reach OYA ⚡ — check your connection and try again.';
     gtag('event','ask_error',{mode:currentMode});
+    if(usedCount<FREE_LIMIT)document.getElementById('askBtn').disabled=false;
   }
+}
 
+function finishAnswer(oyaBubble,fullAnswer,userMessage,t0){
+  addBubbleActions(oyaBubble,fullAnswer);
+  conversationHistory.push({role:'user',content:userMessage});
+  conversationHistory.push({role:'assistant',content:fullAnswer});
+  document.getElementById('followUpBox').style.display='flex';
+  loadSmartRecommendations(userMessage,fullAnswer);
+  usedCount++;
+  localStorage.setItem('oya_used',usedCount.toString());
+  updateFreeCount();
   if(usedCount<FREE_LIMIT)document.getElementById('askBtn').disabled=false;
+  gtag('event','ask_oya',{mode:currentMode,response_ms:Date.now()-t0});
+  scrollChat();
+}
+
+async function loadSmartRecommendations(question,answer){
+  // Show loading state
+  document.getElementById('recommendBtns').innerHTML=
+    '<div style="color:var(--muted);font-size:0.75rem;padding:0.5rem 0;">⚡ Generating smart suggestions...</div>';
+  document.getElementById('recommendBox').style.display='block';
+  scrollChat();
+  try{
+    const res=await fetch(RECS_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({question,answer,mode:currentMode})
+    });
+    const data=await res.json();
+    if(data.recommendations&&Array.isArray(data.recommendations)){
+      document.getElementById('recommendBtns').innerHTML=data.recommendations.map((r,i)=>
+        `<button class="recommend-btn" onclick="useRec(this)"><span>${i+1}.</span>${r}</button>`
+      ).join('');
+    } else {
+      document.getElementById('recommendBox').style.display='none';
+    }
+  }catch(e){
+    document.getElementById('recommendBox').style.display='none';
+  }
   scrollChat();
 }
 
@@ -846,6 +946,37 @@ function initParticles(){
     requestAnimationFrame(loop);
   }
   loop();
+// ---- PWA INSTALL ----
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredPrompt=e;
+  if(!localStorage.getItem('oya_pwa_dismissed')){
+    setTimeout(()=>document.getElementById('pwaBanner').classList.add('show'),5000);
+  }
+});
+function installPWA(){
+  if(!deferredPrompt){showToast('Open in Chrome to install OYA app!');return;}
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(c=>{
+    if(c.outcome==='accepted'){showToast('⚡ OYA installed! Check your home screen');}
+    deferredPrompt=null;
+    document.getElementById('pwaBanner').classList.remove('show');
+  });
+}
+function dismissPWA(){
+  document.getElementById('pwaBanner').classList.remove('show');
+  localStorage.setItem('oya_pwa_dismissed','1');
+}
+window.addEventListener('appinstalled',()=>{
+  showToast('⚡ OYA installed successfully!');
+  document.getElementById('pwaBanner').classList.remove('show');
+});
+// ---- SERVICE WORKER ----
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
 }
 </script>
 </body>
